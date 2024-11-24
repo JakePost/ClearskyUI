@@ -13,13 +13,12 @@ let blocklistDebounce = 0;
 export function blocklist(handleOrDID) {
   if (blocklistFetchQueued.has(handleOrDID)) return blocklistFetchQueued.get(handleOrDID);
 
-  let generator = blocklistCall(handleOrDID, 'blocklist');
-  blocklistFetchQueued.set(handleOrDID, generator);
+  blocklistFetchQueued.set(handleOrDID, blocklistCall(handleOrDID, 'blocklist'));
 
   clearTimeout(blocklistDebounce);
   blocklistDebounce = setTimeout(() => blocklistFetchQueued.delete(handleOrDID), 1000);
 
-  return generator;
+  return blocklistCall(handleOrDID, 'blocklist');
 }
 
 const singleBlocklistFetchQueued = new Map();
@@ -31,14 +30,12 @@ let singleBlocklistDebounce = 0;
 export function singleBlocklist(handleOrDID) {
   if (singleBlocklistFetchQueued.has(handleOrDID)) return singleBlocklistFetchQueued.get(handleOrDID);
 
-  let generator = blocklistCall(handleOrDID, 'single-blocklist');
-
-  singleBlocklistFetchQueued.set(handleOrDID, generator);
+  singleBlocklistFetchQueued.set(handleOrDID, blocklistCall(handleOrDID, 'single-blocklist'));
 
   clearTimeout(singleBlocklistDebounce);
   singleBlocklistDebounce = setTimeout(() => singleBlocklistFetchQueued.delete(handleOrDID), 1000);
 
-  return generator;
+  return blocklistCall(handleOrDID, 'single-blocklist');;
 }
 
 /**
